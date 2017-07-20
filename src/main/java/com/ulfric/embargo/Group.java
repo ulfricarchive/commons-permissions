@@ -1,19 +1,23 @@
 package com.ulfric.embargo;
 
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
+
 import com.ulfric.commons.value.UniqueIdHelper;
+
+import java.util.Map;
 
 public class Group extends SkeletalEntity {
 
-	static {
-		setupEntityType(Group.class);
-	}
+	private static final Map<String, Group> GROUPS = new CaseInsensitiveMap<>();
 
 	public static Group getGroup(String name) {
-		return (Group) SkeletalEntity.ENTITIES_BY_NAME.get(Group.class).get(name);
+		return GROUPS.get(name);
 	}
 
 	public Group(String name) {
 		super(name, UniqueIdHelper.nameUniqueId(name));
+
+		GROUPS.put(name, this);
 	}
 
 }

@@ -1,14 +1,10 @@
 package com.ulfric.embargo;
 
-import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import com.ulfric.embargo.limit.Limit;
 import com.ulfric.embargo.limit.StandardLimits;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -18,25 +14,16 @@ import java.util.concurrent.ConcurrentMap;
 
 public abstract class SkeletalEntity implements Entity {
 
-	 // TODO limit cache size?
-	static final Map<Class<?>, Map<String, SkeletalEntity>> ENTITIES_BY_NAME = new IdentityHashMap<>();
-	static final Map<Class<?>, ConcurrentMap<UUID, SkeletalEntity>> ENTITIES_BY_ID = new IdentityHashMap<>();
+	private final ConcurrentMap<String, Allowance> permissionCache = new ConcurrentHashMap<>();
+	protected final PatriciaTrie<Allowance> permissions = new PatriciaTrie<>();
 
-	static void setupEntityType(Class<?> type) {
-		SkeletalEntity.ENTITIES_BY_ID.putIfAbsent(type, new ConcurrentHashMap<>());
-		SkeletalEntity.ENTITIES_BY_NAME.putIfAbsent(type, Collections.synchronizedMap(new CaseInsensitiveMap<>()));
-	}
+	private final ConcurrentMap<String, Limit> limitsCache = new ConcurrentHashMap<>();
+	protected final PatriciaTrie<Limit> limits = new PatriciaTrie<>();
 
-	private final Map<String, Allowance> permissionCache = new HashMap<>();
-	private final PatriciaTrie<Allowance> permissions = new PatriciaTrie<>();
+	protected final Map<UUID, Entity> parents = new LinkedHashMap<>();
 
-	private final Map<String, Limit> limitsCache = new HashMap<>();
-	private final PatriciaTrie<Limit> limits = new PatriciaTrie<>();
-
-	private final Map<UUID, Entity> parents = new LinkedHashMap<>();
-
-	protected String name;
-	protected UUID uniqueId;
+	private final String name;
+	private final UUID uniqueId;
 
 	public SkeletalEntity(String name, UUID uniqueId) {
 		Objects.requireNonNull(name, "name");
@@ -44,15 +31,6 @@ public abstract class SkeletalEntity implements Entity {
 
 		this.name = name;
 		this.uniqueId = uniqueId;
-		registerThis();
-	}
-
-	private void registerThis() {
-		Class<?> type = getClass();
-		ENTITIES_BY_ID.computeIfAbsent(type, ignore -> new ConcurrentHashMap<>())
-			.put(uniqueId, this);
-		ENTITIES_BY_NAME.computeIfAbsent(type, ignore -> Collections.synchronizedMap(new CaseInsensitiveMap<>()))
-			.put(name, this);
 	}
 
 	@Override
@@ -89,7 +67,7 @@ public abstract class SkeletalEntity implements Entity {
 
 	@Override
 	public Limit getLimit(String node) {
-		return limitsCache.computeIfAbsent(node.toLowerCase(), this::lookupLimit);
+		return limitsCache.computeIfAbsent(node, this::lookupLimit);
 	}
 
 	private Limit lookupLimit(String node) {
@@ -118,7 +96,7 @@ public abstract class SkeletalEntity implements Entity {
 		}
 
 		if (permissions.put(node, allowance) != allowance) {
-			clearCache();
+			recalculate();
 		}
 	}
 
@@ -127,7 +105,7 @@ public abstract class SkeletalEntity implements Entity {
 		Objects.requireNonNull(node, "node");
 
 		if (permissions.remove(node) != null) {
-			clearCache();
+			recalculate();
 		}
 	}
 
@@ -142,7 +120,7 @@ public abstract class SkeletalEntity implements Entity {
 
 		Limit old = limits.put(node, limit);
 		if (!Objects.equals(old, limit)) {
-			clearCache();
+			recalculate();
 		}
 	}
 
@@ -151,7 +129,7 @@ public abstract class SkeletalEntity implements Entity {
 		Objects.requireNonNull(node, "node");
 
 		if (limits.remove(node) != null) {
-			clearCache();
+			recalculate();
 		}
 	}
 
@@ -167,18 +145,19 @@ public abstract class SkeletalEntity implements Entity {
 	public void addParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
 		parents.put(entity.getUniqueId(), entity);
-		clearCache();
+		recalculate();
 	}
 
 	@Override
 	public void removeParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
 		if (parents.remove(entity.getUniqueId(), entity)) {
-			clearCache();
+			recalculate();
 		}
 	}
 
-	private void clearCache() { // TODO clear caches of children
+	@Override
+	public void recalculate() { // TODO clear caches of children
 		limitsCache.clear();
 		permissionCache.clear();
 	}

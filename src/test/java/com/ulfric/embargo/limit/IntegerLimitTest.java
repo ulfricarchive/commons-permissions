@@ -46,4 +46,9 @@ class IntegerLimitTest {
 		Veracity.assertThat(() -> IntegerLimit.of(3).and(null)).doesThrow(IllegalArgumentException.class);
 	}
 
+	@Test
+	void testIntValue() {
+		Truth.assertThat(IntegerLimit.of(3).intValue()).isEqualTo(3);
+	}
+
 }

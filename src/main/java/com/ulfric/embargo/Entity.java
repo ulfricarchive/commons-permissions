@@ -4,19 +4,15 @@ import com.ulfric.embargo.limit.Limit;
 
 import java.util.UUID;
 
-public interface Entity {
+public interface Entity extends Permissible {
 
 	String getName();
 
 	UUID getUniqueId();
 
-	Allowance testPermission(String node);
-
 	void setPermission(String node, Allowance allowance);
 
 	void clearPermission(String node);
-
-	Limit getLimit(String node);
 
 	void setLimit(String node, Limit limit);
 
@@ -25,5 +21,7 @@ public interface Entity {
 	void addParent(Entity entity);
 
 	void removeParent(Entity entity);
+
+	void recalculate();
 
 }

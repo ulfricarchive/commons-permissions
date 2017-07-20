@@ -41,4 +41,8 @@ public class IntegerLimit extends Bean implements Limit {
 		throw new IllegalArgumentException("Could not merge " + this + " and " + that);
 	}
 
+	public int intValue() {
+		return limit;
+	}
+
 }
