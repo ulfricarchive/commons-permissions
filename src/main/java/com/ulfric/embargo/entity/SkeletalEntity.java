@@ -1,9 +1,10 @@
-package com.ulfric.embargo;
+package com.ulfric.embargo.entity;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import com.ulfric.embargo.limit.Limit;
 import com.ulfric.embargo.limit.StandardLimits;
+import com.ulfric.embargo.node.Allowance;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

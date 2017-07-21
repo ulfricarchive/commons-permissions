@@ -1,4 +1,4 @@
-package com.ulfric.embargo;
+package com.ulfric.embargo.entity;
 
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 

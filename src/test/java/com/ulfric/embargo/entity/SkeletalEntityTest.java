@@ -1,4 +1,4 @@
-package com.ulfric.embargo;
+package com.ulfric.embargo.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,8 +7,10 @@ import org.junit.runner.RunWith;
 
 import com.google.common.truth.Truth;
 
+import com.ulfric.embargo.entity.Group;
 import com.ulfric.embargo.limit.IntegerLimit;
 import com.ulfric.embargo.limit.StandardLimits;
+import com.ulfric.embargo.node.Allowance;
 
 import java.util.UUID;
 

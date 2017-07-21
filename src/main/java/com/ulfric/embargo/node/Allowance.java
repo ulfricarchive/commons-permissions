@@ -1,4 +1,4 @@
-package com.ulfric.embargo;
+package com.ulfric.embargo.node;
 
 public enum Allowance {
 

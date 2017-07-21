@@ -1,6 +1,8 @@
-package com.ulfric.embargo;
+package com.ulfric.embargo.entity;
 
+import com.ulfric.embargo.Permissible;
 import com.ulfric.embargo.limit.Limit;
+import com.ulfric.embargo.node.Allowance;
 
 import java.util.UUID;
 
