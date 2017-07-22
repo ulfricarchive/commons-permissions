@@ -26,7 +26,7 @@ class SkeletalEntityTest {
 
 	@Test
 	void testLookupPermissionNoPermissions() {
-		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNKNOWN);
+		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNDEFINED);
 	}
 
 	@Test
@@ -53,7 +53,7 @@ class SkeletalEntityTest {
 	void testRemovePermission() {
 		entity.setPermission("hello", Allowance.ALLOWED);
 		entity.setPermission("hello", null);
-		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNKNOWN);
+		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNDEFINED);
 	}
 
 	@Test
@@ -71,7 +71,7 @@ class SkeletalEntityTest {
 	void testLookupPermissionPermissionFromParentWithoutNode() {
 		Entity parent = new Entity();
 		entity.addParent(parent);
-		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNKNOWN);
+		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNDEFINED);
 	}
 
 	@Test
@@ -131,7 +131,32 @@ class SkeletalEntityTest {
 		parent.setPermission("hello", Allowance.ALLOWED);
 		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.ALLOWED);
 		entity.removeParent(parent);
-		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNKNOWN);
+		Truth.assertThat(entity.testPermission("hello")).isSameAs(Allowance.UNDEFINED);
+	}
+
+	@Test
+	void testHasParentWithParentAdded() {
+		Entity parent = new Entity();
+		entity.addParent(parent);
+		Truth.assertThat(entity.hasParent(parent)).isTrue();
+	}
+
+	@Test
+	void testHasParentWithoutParent() {
+		Entity parent = new Entity();
+		Truth.assertThat(entity.hasParent(parent)).isFalse();
+	}
+
+	@Test
+	void testGetParents() {
+		Entity parent = new Entity();
+		entity.addParent(parent);
+		Truth.assertThat(entity.getParents()).containsExactly(parent);
+	}
+
+	@Test
+	void testGetParentsWithoutParent() {
+		Truth.assertThat(entity.getParents()).isEmpty();
 	}
 
 	@Test
@@ -142,7 +167,7 @@ class SkeletalEntityTest {
 		entity.setPermission("hello", Allowance.ALLOWED);
 		entity.setPermission("hello", null);
 		entity.setPermission("hello", null);
-		entity.setPermission("hello", Allowance.UNKNOWN);
+		entity.setPermission("hello", Allowance.UNDEFINED);
 
 		entity.setLimit("hello", StandardLimits.UNLIMITED);
 		entity.setLimit("hello", StandardLimits.UNLIMITED);

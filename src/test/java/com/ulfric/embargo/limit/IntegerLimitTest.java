@@ -47,6 +47,31 @@ class IntegerLimitTest {
 	}
 
 	@Test
+	void testWithoutGoesNegative() {
+		Truth.assertThat(IntegerLimit.of(3).without(IntegerLimit.of(5))).isSameAs(StandardLimits.NONE);
+	}
+
+	@Test
+	void testWithoutUnlimited() {
+		Truth.assertThat(IntegerLimit.of(3).without(StandardLimits.UNLIMITED)).isSameAs(StandardLimits.NONE);
+	}
+
+	@Test
+	void testWithoutNone() {
+		Truth.assertThat(IntegerLimit.of(3).without(StandardLimits.NONE)).isEqualTo(IntegerLimit.of(3));
+	}
+
+	@Test
+	void testWithoutIntegerLimit() {
+		Truth.assertThat(IntegerLimit.of(3).without(IntegerLimit.of(1))).isEqualTo(IntegerLimit.of(2));
+	}
+
+	@Test
+	void testWithoutUnknown() {
+		Veracity.assertThat(() -> IntegerLimit.of(3).without(null)).doesThrow(IllegalArgumentException.class);
+	}
+
+	@Test
 	void testIntValue() {
 		Truth.assertThat(IntegerLimit.of(3).intValue()).isEqualTo(3);
 	}

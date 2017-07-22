@@ -6,7 +6,10 @@ import com.ulfric.embargo.limit.Limit;
 import com.ulfric.embargo.limit.StandardLimits;
 import com.ulfric.embargo.node.Allowance;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -58,12 +61,12 @@ public abstract class SkeletalEntity implements Entity {
 
 		for (Entity parent : parents.values()) {
 			allowance = parent.testPermission(node); // TODO what if another parent gives a more specific entry
-			if (allowance != Allowance.UNKNOWN) {
+			if (allowance != Allowance.UNDEFINED) {
 				return allowance;
 			}
 		}
 
-		return allowance == null ? Allowance.UNKNOWN : allowance;
+		return allowance == null ? Allowance.UNDEFINED : allowance;
 	}
 
 	@Override
@@ -135,7 +138,7 @@ public abstract class SkeletalEntity implements Entity {
 	}
 
 	private boolean isRemoval(Allowance allowance) {
-		return allowance == null || allowance == Allowance.UNKNOWN;
+		return allowance == null || allowance == Allowance.UNDEFINED;
 	}
 
 	private boolean isRemoval(Limit limit) {
@@ -145,6 +148,7 @@ public abstract class SkeletalEntity implements Entity {
 	@Override
 	public void addParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
+
 		parents.put(entity.getUniqueId(), entity);
 		recalculate();
 	}
@@ -152,9 +156,22 @@ public abstract class SkeletalEntity implements Entity {
 	@Override
 	public void removeParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
+
 		if (parents.remove(entity.getUniqueId(), entity)) {
 			recalculate();
 		}
+	}
+
+	@Override
+	public boolean hasParent(Entity entity) {
+		Objects.requireNonNull(entity, "entity");
+
+		return parents.containsKey(entity.getUniqueId());
+	}
+
+	@Override
+	public List<Entity> getParents() {
+		return Collections.unmodifiableList(new ArrayList<>(parents.values()));
 	}
 
 	@Override

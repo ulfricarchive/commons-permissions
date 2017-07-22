@@ -4,6 +4,6 @@ public enum Allowance {
 
 	ALLOWED,
 	DENIED,
-	UNKNOWN;
+	UNDEFINED;
 
 }

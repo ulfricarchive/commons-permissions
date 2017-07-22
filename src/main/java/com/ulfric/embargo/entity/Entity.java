@@ -4,6 +4,7 @@ import com.ulfric.embargo.Permissible;
 import com.ulfric.embargo.limit.Limit;
 import com.ulfric.embargo.node.Allowance;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface Entity extends Permissible {
@@ -23,6 +24,10 @@ public interface Entity extends Permissible {
 	void addParent(Entity entity);
 
 	void removeParent(Entity entity);
+
+	boolean hasParent(Entity entity);
+
+	List<Entity> getParents();
 
 	void recalculate();
 

@@ -26,6 +26,11 @@ class StandardLimitsTest extends EnumTestSuite {
 	}
 
 	@Test
+	void testNoneWithoutAnything() {
+		Truth.assertThat(StandardLimits.NONE.without(IntegerLimit.of(3))).isEqualTo(StandardLimits.NONE);
+	}
+
+	@Test
 	void testUnlimitedEverythingWithinBounds() {
 		Truth.assertThat(StandardLimits.UNLIMITED.isWithinBounds(Integer.MAX_VALUE)).isTrue();
 	}
@@ -33,6 +38,11 @@ class StandardLimitsTest extends EnumTestSuite {
 	@Test
 	void testUnlimitedEverythingAndAnything() {
 		Truth.assertThat(StandardLimits.UNLIMITED.and(IntegerLimit.of(3))).isSameAs(StandardLimits.UNLIMITED);
+	}
+
+	@Test
+	void testUnlimitedEverythingWithoutAnything() {
+		Truth.assertThat(StandardLimits.UNLIMITED.without(IntegerLimit.of(3))).isSameAs(StandardLimits.UNLIMITED);
 	}
 
 }

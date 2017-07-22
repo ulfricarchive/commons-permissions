@@ -6,4 +6,6 @@ public interface Limit {
 
 	Limit and(Limit other);
 
+	Limit without(Limit other);
+
 }

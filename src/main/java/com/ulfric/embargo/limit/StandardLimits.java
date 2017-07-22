@@ -26,4 +26,9 @@ public enum StandardLimits implements Limit {
 		}
 	};
 
+	@Override
+	public Limit without(Limit other) {
+		return this;
+	}
+
 }

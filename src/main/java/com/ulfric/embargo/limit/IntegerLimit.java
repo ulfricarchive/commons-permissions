@@ -4,7 +4,7 @@ import com.ulfric.commons.value.Bean;
 
 public class IntegerLimit extends Bean implements Limit {
 
-	public static IntegerLimit of(int limit) {
+	public static IntegerLimit of(int limit) { // TODO caching?
 		if (limit < 0) {
 			throw new IllegalArgumentException("limit must be positive, was: " + limit);
 		}
@@ -43,6 +43,28 @@ public class IntegerLimit extends Bean implements Limit {
 
 	public int intValue() {
 		return limit;
+	}
+
+	@Override
+	public Limit without(Limit other) {
+		if (other instanceof IntegerLimit) {
+			IntegerLimit that = (IntegerLimit) other;
+			int value = limit - that.limit;
+			if (value < 0) {
+				return StandardLimits.NONE;
+			}
+			return IntegerLimit.of(value);
+		}
+
+		if (other == StandardLimits.NONE) {
+			return this;
+		}
+
+		if (other == StandardLimits.UNLIMITED) {
+			return StandardLimits.NONE;
+		}
+
+		throw new IllegalArgumentException("Could not subtract limit: " + other);
 	}
 
 }
