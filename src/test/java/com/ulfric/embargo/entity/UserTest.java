@@ -6,8 +6,6 @@ import org.junit.runner.RunWith;
 
 import com.google.common.truth.Truth;
 
-import com.ulfric.embargo.entity.User;
-
 import java.util.UUID;
 
 @RunWith(JUnitPlatform.class)
