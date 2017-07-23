@@ -12,6 +12,11 @@ public enum StandardLimits implements Limit {
 		public Limit and(Limit other) {
 			return other;
 		}
+
+		@Override
+		public boolean isWithinBounds(Limit ask) {
+			return ask == this;
+		}
 	},
 
 	UNLIMITED {
@@ -23,6 +28,11 @@ public enum StandardLimits implements Limit {
 		@Override
 		public Limit and(Limit other) {
 			return this;
+		}
+
+		@Override
+		public boolean isWithinBounds(Limit ask) {
+			return true;
 		}
 	};
 

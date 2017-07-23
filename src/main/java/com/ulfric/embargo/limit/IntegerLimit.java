@@ -19,6 +19,23 @@ public class IntegerLimit extends Bean implements Limit {
 	}
 
 	@Override
+	public boolean isWithinBounds(Limit ask) { // TODO not a fan of the name on this -- a bit confusing which limit goes where
+		if (ask == this) {
+			return true;
+		}
+
+		if (ask instanceof IntegerLimit) {
+			return isWithinBounds(((IntegerLimit) ask).limit);
+		}
+
+		if (ask == StandardLimits.UNLIMITED) {
+			return false;
+		}
+
+		return ask == StandardLimits.NONE;
+	}
+
+	@Override
 	public boolean isWithinBounds(int ask) {
 		return ask <= limit;
 	}
