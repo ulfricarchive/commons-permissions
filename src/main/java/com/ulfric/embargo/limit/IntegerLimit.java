@@ -5,7 +5,7 @@ import com.ulfric.commons.value.Bean;
 public class IntegerLimit extends Bean implements Limit {
 
 	public static IntegerLimit of(int limit) { // TODO caching?
-		if (limit < 0) {
+		if (limit < 1) {
 			throw new IllegalArgumentException("limit must be positive, was: " + limit);
 		}
 

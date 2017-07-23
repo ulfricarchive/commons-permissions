@@ -27,6 +27,37 @@ class IntegerLimitTest {
 	}
 
 	@Test
+	void testIsWithinBoundsIntegerLimit() {
+		Truth.assertThat(IntegerLimit.of(5).isWithinBounds(IntegerLimit.of(4))).isTrue();
+	}
+
+	@Test
+	void testIsWithinBoundsIntegerLimitSelf() {
+		Limit self = IntegerLimit.of(1);
+		Truth.assertThat(self.isWithinBounds(self)).isTrue();
+	}
+
+	@Test
+	void testIsWithinBoundsIntegerLimitNull() {
+		Truth.assertThat(IntegerLimit.of(1).isWithinBounds(null)).isFalse();
+	}
+
+	@Test
+	void testIsWithinBoundsIntegerLimitNotWithinBounds() {
+		Truth.assertThat(IntegerLimit.of(3).isWithinBounds(IntegerLimit.of(4))).isFalse();
+	}
+
+	@Test
+	void testIsWithinBoundsUnlimited() {
+		Truth.assertThat(IntegerLimit.of(3).isWithinBounds(StandardLimits.UNLIMITED)).isFalse();
+	}
+
+	@Test
+	void testIsWithinBoundsNone() {
+		Truth.assertThat(IntegerLimit.of(3).isWithinBounds(StandardLimits.NONE)).isTrue();
+	}
+
+	@Test
 	void testAndUnlimited() {
 		Truth.assertThat(IntegerLimit.of(3).and(StandardLimits.UNLIMITED)).isSameAs(StandardLimits.UNLIMITED);
 	}
