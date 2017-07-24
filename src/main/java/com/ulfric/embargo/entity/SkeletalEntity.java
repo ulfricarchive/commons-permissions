@@ -2,6 +2,7 @@ package com.ulfric.embargo.entity;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
+import com.ulfric.commons.collection.MapHelper;
 import com.ulfric.embargo.limit.Limit;
 import com.ulfric.embargo.limit.StandardLimits;
 import com.ulfric.embargo.node.Allowance;
@@ -13,15 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public abstract class SkeletalEntity implements Entity {
 
-	private final ConcurrentMap<String, Allowance> permissionCache = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, Allowance> permissionCache = MapHelper.newConcurrentMap(1);
 	protected final PatriciaTrie<Allowance> permissions = new PatriciaTrie<>();
 
-	private final ConcurrentMap<String, Limit> limitsCache = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, Limit> limitsCache = MapHelper.newConcurrentMap(1);
 	protected final PatriciaTrie<Limit> limits = new PatriciaTrie<>();
 
 	protected final Map<UUID, Entity> parents = new LinkedHashMap<>();
