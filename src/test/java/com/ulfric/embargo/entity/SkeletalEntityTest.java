@@ -2,8 +2,6 @@ package com.ulfric.embargo.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 
 import com.google.common.truth.Truth;
 
@@ -13,7 +11,6 @@ import com.ulfric.embargo.node.Allowance;
 
 import java.util.UUID;
 
-@RunWith(JUnitPlatform.class)
 class SkeletalEntityTest {
 
 	private Entity entity;
