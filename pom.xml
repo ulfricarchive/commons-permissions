@@ -21,12 +21,6 @@
 			<artifactId>commons</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.ulfric.andrew</groupId>
-			<artifactId>andrew</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 	</dependencies>
 
 </project>
