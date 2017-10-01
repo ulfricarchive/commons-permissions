@@ -1,4 +1,4 @@
-package com.ulfric.embargo.node;
+package com.ulfric.commons.permissions.node;
 
 public enum Allowance {
 

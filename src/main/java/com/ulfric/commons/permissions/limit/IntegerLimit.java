@@ -1,4 +1,4 @@
-package com.ulfric.embargo.limit;
+package com.ulfric.commons.permissions.limit;
 
 import com.ulfric.commons.value.Bean;
 

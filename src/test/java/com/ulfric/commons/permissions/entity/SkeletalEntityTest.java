@@ -1,13 +1,14 @@
-package com.ulfric.embargo.entity;
+package com.ulfric.commons.permissions.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.truth.Truth;
 
-import com.ulfric.embargo.limit.IntegerLimit;
-import com.ulfric.embargo.limit.StandardLimits;
-import com.ulfric.embargo.node.Allowance;
+import com.ulfric.commons.permissions.entity.Group;
+import com.ulfric.commons.permissions.limit.IntegerLimit;
+import com.ulfric.commons.permissions.limit.StandardLimits;
+import com.ulfric.commons.permissions.node.Allowance;
 
 import java.util.UUID;
 

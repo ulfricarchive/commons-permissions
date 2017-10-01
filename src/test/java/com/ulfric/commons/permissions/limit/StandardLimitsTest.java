@@ -1,9 +1,11 @@
-package com.ulfric.embargo.limit;
+package com.ulfric.commons.permissions.limit;
 
 import org.junit.jupiter.api.Test;
 
 import com.google.common.truth.Truth;
 
+import com.ulfric.commons.permissions.limit.IntegerLimit;
+import com.ulfric.commons.permissions.limit.StandardLimits;
 import com.ulfric.veracity.suite.EnumTestSuite;
 
 class StandardLimitsTest extends EnumTestSuite {

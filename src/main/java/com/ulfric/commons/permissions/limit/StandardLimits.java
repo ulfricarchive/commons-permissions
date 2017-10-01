@@ -1,4 +1,4 @@
-package com.ulfric.embargo.limit;
+package com.ulfric.commons.permissions.limit;
 
 public enum StandardLimits implements Limit {
 

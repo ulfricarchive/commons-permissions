@@ -1,11 +1,11 @@
-package com.ulfric.embargo.entity;
+package com.ulfric.commons.permissions.entity;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import com.ulfric.commons.collection.MapHelper;
-import com.ulfric.embargo.limit.Limit;
-import com.ulfric.embargo.limit.StandardLimits;
-import com.ulfric.embargo.node.Allowance;
+import com.ulfric.commons.permissions.limit.Limit;
+import com.ulfric.commons.permissions.limit.StandardLimits;
+import com.ulfric.commons.permissions.node.Allowance;
 
 import java.util.ArrayList;
 import java.util.Collections;

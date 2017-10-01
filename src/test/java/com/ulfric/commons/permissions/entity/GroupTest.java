@@ -1,8 +1,10 @@
-package com.ulfric.embargo.entity;
+package com.ulfric.commons.permissions.entity;
 
 import org.junit.jupiter.api.Test;
 
 import com.google.common.truth.Truth;
+
+import com.ulfric.commons.permissions.entity.Group;
 
 import java.util.UUID;
 
