@@ -4,9 +4,15 @@ import com.ulfric.commons.value.Bean;
 
 public class IntegerLimit extends Bean implements Limit {
 
-	public static IntegerLimit of(int limit) { // TODO caching?
+	private static final IntegerLimit ONE = new IntegerLimit(1);
+
+	public static IntegerLimit of(int limit) {
 		if (limit < 1) {
 			throw new IllegalArgumentException("limit must be positive, was: " + limit);
+		}
+
+		if (limit == 1) {
+			return ONE;
 		}
 
 		return new IntegerLimit(limit);
