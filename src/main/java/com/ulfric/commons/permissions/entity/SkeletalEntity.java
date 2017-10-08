@@ -60,7 +60,7 @@ public abstract class SkeletalEntity implements Entity {
 		}
 
 		for (Entity parent : parents.values()) {
-			allowance = parent.testPermission(node); // TODO what if another parent gives a more specific entry
+			allowance = parent.testPermission(node);
 			if (allowance != Allowance.UNDEFINED) {
 				return allowance;
 			}
@@ -81,7 +81,7 @@ public abstract class SkeletalEntity implements Entity {
 		}
 
 		for (Entity parent : parents.values()) {
-			limit = parent.getLimit(node); // TODO what if another parent gives a more specific entry
+			limit = parent.getLimit(node);
 			if (limit != StandardLimits.NONE) {
 				return limit;
 			}
