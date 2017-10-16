@@ -1,22 +1,21 @@
 package com.ulfric.commons.permissions.entity;
 
-import org.apache.commons.collections4.trie.PatriciaTrie;
-
-import com.ulfric.commons.collection.MapHelper;
-import com.ulfric.commons.permissions.limit.Limit;
-import com.ulfric.commons.permissions.limit.StandardLimits;
-import com.ulfric.commons.permissions.node.Allowance;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
-public abstract class SkeletalEntity implements Entity {
+import org.apache.commons.collections4.trie.PatriciaTrie;
+
+import com.ulfric.commons.collection.ListHelper;
+import com.ulfric.commons.collection.MapHelper;
+import com.ulfric.commons.permissions.limit.Limit;
+import com.ulfric.commons.permissions.limit.StandardLimits;
+import com.ulfric.commons.permissions.node.Allowance;
+
+public class PatriciaTrieEntity implements Entity {
 
 	private final ConcurrentMap<String, Allowance> permissionCache = MapHelper.newConcurrentMap(1);
 	protected final PatriciaTrie<Allowance> permissions = new PatriciaTrie<>();
@@ -24,27 +23,22 @@ public abstract class SkeletalEntity implements Entity {
 	private final ConcurrentMap<String, Limit> limitsCache = MapHelper.newConcurrentMap(1);
 	protected final PatriciaTrie<Limit> limits = new PatriciaTrie<>();
 
-	protected final Map<UUID, Entity> parents = new LinkedHashMap<>();
+	protected final List<Entity> parents = new ArrayList<>();
 
-	private final String name;
-	private final UUID uniqueId;
+	private final String identifier;
 
-	public SkeletalEntity(String name, UUID uniqueId) {
-		Objects.requireNonNull(name, "name");
-		Objects.requireNonNull(uniqueId, "uniqueId");
+	public PatriciaTrieEntity(UUID identifier) {
+		this(identifier.toString());
+	}
 
-		this.name = name;
-		this.uniqueId = uniqueId;
+	public PatriciaTrieEntity(String identifier) {
+		Objects.requireNonNull(identifier, "identifier");
+		this.identifier = identifier;
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public UUID getUniqueId() {
-		return uniqueId;
+	public String getIdentifier() {
+		return identifier;
 	}
 
 	@Override
@@ -59,7 +53,7 @@ public abstract class SkeletalEntity implements Entity {
 			return allowance;
 		}
 
-		for (Entity parent : parents.values()) {
+		for (Entity parent : parents) {
 			allowance = parent.testPermission(node);
 			if (allowance != Allowance.UNDEFINED) {
 				return allowance;
@@ -80,7 +74,7 @@ public abstract class SkeletalEntity implements Entity {
 			return limit;
 		}
 
-		for (Entity parent : parents.values()) {
+		for (Entity parent : parents) {
 			limit = parent.getLimit(node);
 			if (limit != StandardLimits.NONE) {
 				return limit;
@@ -142,14 +136,14 @@ public abstract class SkeletalEntity implements Entity {
 	}
 
 	private boolean isRemoval(Limit limit) {
-		return limit == null || limit == StandardLimits.NONE;
+		return limit == null;
 	}
 
 	@Override
 	public void addParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
 
-		parents.put(entity.getUniqueId(), entity);
+		parents.add(entity);
 		recalculate();
 	}
 
@@ -157,7 +151,7 @@ public abstract class SkeletalEntity implements Entity {
 	public void removeParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
 
-		if (parents.remove(entity.getUniqueId(), entity)) {
+		if (parents.remove(entity)) {
 			recalculate();
 		}
 	}
@@ -166,12 +160,29 @@ public abstract class SkeletalEntity implements Entity {
 	public boolean hasParent(Entity entity) {
 		Objects.requireNonNull(entity, "entity");
 
-		return parents.containsKey(entity.getUniqueId());
+		return parents.contains(entity);
 	}
 
 	@Override
 	public List<Entity> getParents() {
-		return Collections.unmodifiableList(new ArrayList<>(parents.values()));
+		return ListHelper.unmodifiableCopy(parents);
+	}
+
+	@Override
+	public Map<String, Allowance> getPermissions() {
+		return MapHelper.unmodifiableCopy(permissions);
+	}
+
+	@Override
+	public Map<String, Limit> getLimits() {
+		return MapHelper.unmodifiableCopy(limits);
+	}
+
+	public void clear() {
+		parents.clear();
+		limits.clear();
+		permissions.clear();
+		recalculate();
 	}
 
 	@Override

@@ -6,4 +6,8 @@ public enum Allowance {
 	DENIED,
 	UNDEFINED;
 
+	public static Allowance valueOf(boolean value) {
+		return value ? ALLOWED : DENIED;
+	}
+
 }

@@ -5,14 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import com.google.common.truth.Truth;
 
-import com.ulfric.commons.permissions.entity.Group;
 import com.ulfric.commons.permissions.limit.IntegerLimit;
 import com.ulfric.commons.permissions.limit.StandardLimits;
 import com.ulfric.commons.permissions.node.Allowance;
 
 import java.util.UUID;
 
-class SkeletalEntityTest {
+class PatriciaTrieEntityTest {
 
 	private Entity entity;
 
@@ -172,10 +171,10 @@ class SkeletalEntityTest {
 		entity.setLimit("hello", null);
 		entity.setLimit("hello", StandardLimits.NONE);
 
-		entity.getName();
+		entity.getIdentifier();
 	}
 
-	static class Entity extends Group {
+	static class Entity extends PatriciaTrieEntity {
 		public Entity() {
 			super(UUID.randomUUID().toString());
 		}
